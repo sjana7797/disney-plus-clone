@@ -20,31 +20,31 @@ function Home({
   topRatedMovies: Content[];
   popularMovies: Content[];
 }) {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   return (
     <div>
-      {!session ? (
+      {/* {!session ? (
         <Hero />
-      ) : (
-        <main>
-          <Slider trending={trending} />
-          <Brands />
-          {/* Trending Movies Collection*/}
-          <Collections collections={trendingMovies} title="trending movies" />
-          {/* Popular TV Collection*/}
-          <Collections collections={trendingTV} title="popular shows" />
-          {/* Top Rated Movies Collection*/}
-          <Collections collections={topRatedMovies} title="top rated movies" />
-          {/* Popular Movies Collection*/}
-          <Collections collections={popularMovies} title="popular movies" />
-        </main>
-      )}
+      ) : ( */}
+      <main>
+        <Slider trending={trending} />
+        <Brands />
+        {/* Trending Movies Collection*/}
+        <Collections collections={trendingMovies} title="trending movies" />
+        {/* Popular TV Collection*/}
+        <Collections collections={trendingTV} title="popular shows" />
+        {/* Top Rated Movies Collection*/}
+        <Collections collections={topRatedMovies} title="top rated movies" />
+        {/* Popular Movies Collection*/}
+        <Collections collections={popularMovies} title="popular movies" />
+      </main>
+      {/* //  )} */}
     </div>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+  //const session = await getSession(context);
   const trendingMovies: Content[] = await customAxios
     .get("trending/movie/day")
     .then((res) => res.data.results);
@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .then((res) => res.data.results);
   return {
     props: {
-      session,
+      //session,
       trendingMovies,
       trendingTV,
       trending,

@@ -17,8 +17,10 @@ function Header() {
         className="cursor-pointer"
         onClick={() => router.push("/")}
       />
-      {session && <Nav />}
+      {/* {session && <Nav />} */}
 
+      <Nav />
+      {/* 
       {!session ? (
         <button
           className="ml-auto uppercase border px-4 py-1.5 rounded-md font-medium tracking-wide hover:bg-white hover:text-slate-900 transition duration-200"
@@ -38,7 +40,7 @@ function Header() {
             objectFit="cover"
           />
         </div>
-      )}
+      )} */}
     </header>
   );
 }
