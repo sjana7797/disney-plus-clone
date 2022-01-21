@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import logo from "../../../assets/images/logo.svg";
 
 function Header() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const router = useRouter();
   return (
     <header className="sticky bg-slate-900 top-0 z-[1000] flex h-[72px] items-center px-10 md:px-12">
