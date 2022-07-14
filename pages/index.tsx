@@ -1,6 +1,7 @@
-import type { GetServerSideProps, NextPage } from "next";
-import { getSession, useSession } from "next-auth/react";
-import Collections from "../components/Global/Collections/Collection";
+import axios from "axios";
+import type { GetServerSideProps } from "next";
+import { useSession } from "next-auth/react";
+import Collections from "../components/Global/Collections/Collections";
 import Hero from "../components/Hero/Hero";
 import Brands from "../components/Home/Brands";
 import Slider from "../components/Home/Slider";
@@ -20,46 +21,92 @@ function Home({
   topRatedMovies: Content[];
   popularMovies: Content[];
 }) {
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
   return (
     <div>
-      {/* {!session ? (
+      {!session ? (
         <Hero />
-      ) : ( */}
-      <main>
-        <Slider trending={trending} />
-        <Brands />
-        {/* Trending Movies Collection*/}
-        <Collections collections={trendingMovies} title="trending movies" />
-        {/* Popular TV Collection*/}
-        <Collections collections={trendingTV} title="popular shows" />
-        {/* Top Rated Movies Collection*/}
-        <Collections collections={topRatedMovies} title="top rated movies" />
-        {/* Popular Movies Collection*/}
-        <Collections collections={popularMovies} title="popular movies" />
-      </main>
-      {/* //  )} */}
+      ) : (
+        <main>
+          <Slider trending={trending} />
+          <Brands />
+          {/* Trending Movies Collection*/}
+          <Collections
+            collections={trendingMovies}
+            title="trending movies"
+            mediaType="movie"
+          />
+          {/* Popular TV Collection*/}
+          <Collections
+            collections={trendingTV}
+            title="popular shows"
+            mediaType="tv"
+          />
+          {/* Top Rated Movies Collection*/}
+          <Collections
+            collections={topRatedMovies}
+            title="top rated movies"
+            mediaType="movie"
+          />
+          {/* Popular Movies Collection*/}
+          <Collections
+            collections={popularMovies}
+            title="popular movies"
+            mediaType="movie"
+          />
+        </main>
+      )}
     </div>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   //const session = await getSession(context);
-  const trendingMovies: Content[] = await customAxios
-    .get("trending/movie/day")
-    .then((res) => res.data.results);
-  const trendingTV: Content[] = await customAxios
-    .get("trending/tv/day")
-    .then((res) => res.data.results);
-  const trending: Content[] = await customAxios
-    .get("trending/movie/day")
-    .then((res) => res.data.results.slice(0, 6));
-  const topRatedMovies: Content[] = await customAxios
-    .get("movie/top_rated")
-    .then((res) => res.data.results);
-  const popularMovies: Content[] = await customAxios
-    .get("movie/popular")
-    .then((res) => res.data.results);
+  const trendingMoviesRequest = customAxios.get("trending/movie/day"),
+    trendingTVRequest = customAxios.get("trending/tv/day"),
+    trendingRequest = customAxios.get("trending/movie/day"),
+    topRatedMoviesRequest = customAxios.get("movie/top_rated"),
+    popularMoviesRequest = customAxios.get("movie/popular");
+  const [trendingMovies, trendingTV, trending, topRatedMovies, popularMovies] =
+    await axios
+      .all([
+        trendingMoviesRequest,
+        trendingTVRequest,
+        trendingRequest,
+        topRatedMoviesRequest,
+        popularMoviesRequest,
+      ])
+      .then(
+        axios.spread(
+          (
+            trendingMoviesResponse,
+            trendingTVResponse,
+            trendingResponse,
+            topRatedMoviesResponse,
+            popularMoviesResponse
+          ) => {
+            const trendingMovies: Content[] =
+              trendingMoviesResponse.data.results;
+
+            const trendingTV: Content[] = trendingTVResponse.data.results;
+            const trending: Content[] = trendingResponse.data.results.slice(
+              0,
+              6
+            );
+            const topRatedMovies: Content[] =
+              topRatedMoviesResponse.data.results;
+            const popularMovies: Content[] = popularMoviesResponse.data.results;
+            return [
+              trendingMovies,
+              trendingTV,
+              trending,
+              topRatedMovies,
+              popularMovies,
+            ];
+          }
+        )
+      );
+
   return {
     props: {
       //session,

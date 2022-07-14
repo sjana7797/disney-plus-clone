@@ -6,9 +6,11 @@ import { useRouter } from "next/router";
 function Collections({
   collections,
   title,
+  mediaType,
 }: {
   collections: Content[];
   title: string;
+  mediaType: string;
 }) {
   const router = useRouter();
   return (
@@ -20,7 +22,7 @@ function Collections({
             className="flex min-w-[250px] min-h-[170px] md:min-w-[330px] md:min-h-[210px] rounded-lg overflow-hidden shadow-xl cursor-pointer border-[3px] border-slate-100 border-opacity-10  hover:border-opacity-80 hover:shadow-2xl transform hover:scale-105 transition duration-300 relative group"
             key={collection.id}
             onClick={() =>
-              router.push(`/content/${collection.media_type}/${collection.id}`)
+              router.push(`/content/${mediaType}/${collection.id}`)
             }
           >
             <Image

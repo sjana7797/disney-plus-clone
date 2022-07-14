@@ -4,15 +4,14 @@ import Layout from "../components/Layout/Layout";
 import { SessionProvider } from "next-auth/react";
 import Header from "../components/Global/Header/Header";
 
-// function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <Layout>
       <>
-        {/* <SessionProvider session={session}> */}
-        <Header />
-        <Component {...pageProps} />
-        {/* </SessionProvider> */}
+        <SessionProvider session={session}>
+          <Header />
+          <Component {...pageProps} />
+        </SessionProvider>
       </>
     </Layout>
   );

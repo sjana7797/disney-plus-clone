@@ -1,14 +1,14 @@
 import Image from "next/image";
 import Nav from "./Nav";
-import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import logo from "../../../assets/images/logo.svg";
+import { signIn, useSession } from "next-auth/react";
 
 function Header() {
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   return (
-    <header className="sticky bg-slate-900 top-0 z-[1000] flex h-[72px] items-center px-10 md:px-12">
+    <header className="sticky bg-slate-900 top-0 z-[1000] flex h-[72px] items-center px-10 md:px-12 justify-between flex-col md:flex-row mb-5 py-1">
       <Image
         src={logo}
         width="80"
@@ -17,10 +17,8 @@ function Header() {
         className="cursor-pointer"
         onClick={() => router.push("/")}
       />
-      {/* {session && <Nav />} */}
+      {session && <Nav />}
 
-      <Nav />
-      {/* 
       {!session ? (
         <button
           className="ml-auto uppercase border px-4 py-1.5 rounded-md font-medium tracking-wide hover:bg-white hover:text-slate-900 transition duration-200"
@@ -40,9 +38,12 @@ function Header() {
             objectFit="cover"
           />
         </div>
-      )} */}
+      )}
     </header>
   );
 }
 
 export default Header;
+function signOut(): void {
+  throw new Error("Function not implemented.");
+}
